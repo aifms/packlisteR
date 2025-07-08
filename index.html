@@ -193,10 +193,33 @@
     }
 
     function generatePDF() {
+      // Klone den gesamten body
       const element = document.body.cloneNode(true);
-      element.querySelector(".buttons").remove();
-      element.querySelectorAll(".group").forEach(g => g.classList.add("open"));
-      html2pdf().from(element).save("Packliste.pdf");
+      // Entferne die Buttons
+      element.querySelector('.buttons').remove();
+
+      // Entferne alle einzelnen .item Elemente, die nicht ausgewählt sind
+      element.querySelectorAll('.item').forEach(itemDiv => {
+        const cb = itemDiv.querySelector('input[type="checkbox"]');
+        if (!cb.checked) {
+          itemDiv.remove();
+        }
+      });
+
+      // Verarbeite Gruppen: entferne Gruppen ohne ausgewählte Items, öffne Gruppen mit ausgewählten Items
+      element.querySelectorAll('.group').forEach(groupEl => {
+        const itemsContainer = groupEl.querySelector('.group-items');
+        const remainingItems = itemsContainer.querySelectorAll('.item');
+        if (remainingItems.length === 0) {
+          groupEl.remove();
+        } else {
+          groupEl.classList.add('open');
+          itemsContainer.style.display = 'block';
+        }
+      });
+
+      // Erzeuge PDF nur mit den verbleibenden ausgewählten Items
+      html2pdf().from(element).save('Packliste.pdf');
     }
 
     loadPackliste();
