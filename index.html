@@ -79,7 +79,7 @@
     <button onclick="generatePDF()">📄 Create PDF</button>
     <button onclick="window.print()">🖨️ Print</button>
   </div>
-  <footer>made by AS with &lt;3 PacklistR v0.01a</footer>
+  <footer>made by AS with ❤️ PacklistR v0.01a</footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
@@ -203,7 +203,7 @@
       pdfEl.appendChild(ul);
 
       const footer = document.createElement('footer');
-      footer.textContent = 'made by AS with <3 PacklistR v0.01a';
+      footer.textContent = 'made by AS with ❤️ PacklistR v0.01a';
       pdfEl.appendChild(footer);
 
       html2pdf().from(pdfEl).save('Packliste.pdf');
