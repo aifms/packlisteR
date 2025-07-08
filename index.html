@@ -163,7 +163,7 @@
       pdfEl.style.color = '#000';
       pdfEl.style.padding = '1rem';
       const styleTag = document.createElement('style');
-      styleTag.textContent = `body { background: white; color: black; } ul { list-style: none; padding: 0; } li { margin: 0.5rem 0; } input[type="checkbox"] { transform: scale(1.2); margin-right: 0.5rem; } footer { text-align: center; margin-top: 2rem; font-size: 0.8rem; }`;
+      styleTag.textContent = `body { background: white; color: black; } ul { list-style: none; padding: 0; } ul ul { margin-bottom: 1rem; padding-left: 1.5rem; } li { margin: 0.5rem 0; } input[type="checkbox"] { transform: scale(1.2); margin-right: 0.5rem; } footer { text-align: center; margin-top: 2rem; font-size: 0.8rem; }`;
       pdfEl.appendChild(styleTag);
 
       const title = document.createElement('h1');
