@@ -13,14 +13,12 @@
       max-width: 600px;
       margin: auto;
     }
-
     .group {
       margin-bottom: 1rem;
       border: 1px solid #333;
       border-radius: 8px;
       background: #1e1e1e;
     }
-
     .group-header {
       background: #2a2a2a;
       padding: 0.25rem 0.5rem;
@@ -30,16 +28,13 @@
       margin: 0.5rem 0;
       border-radius: 4px;
     }
-
     .group-items {
       padding: 0.5rem 1rem;
       display: none;
     }
-
     .group.open .group-items {
       display: block;
     }
-
     .item {
       display: flex;
       align-items: center;
@@ -47,24 +42,15 @@
       margin: 0.5rem 0;
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
-      user-select: none;
     }
-
-    .item.checked {
-      background-color: #3a0000;
-    }
-
     label {
-      user-select: none;
       cursor: pointer;
     }
-
     .buttons {
       margin-top: 2rem;
       display: flex;
       gap: 1rem;
     }
-
     button {
       padding: 0.75rem 1.25rem;
       font-size: 1rem;
@@ -74,7 +60,6 @@
       border-radius: 6px;
       cursor: pointer;
     }
-
     button:hover {
       background: #0056b3;
     }
@@ -82,146 +67,97 @@
 </head>
 <body>
   <h1>🎥 packlisteR</h1>
-
   <div id="container"></div>
-
   <div class="buttons">
     <button onclick="generatePDF()">📄 Create PDF</button>
     <button onclick="window.print()">🖨️ Print</button>
   </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     async function loadPackliste() {
       const res = await fetch('packliste.json');
       const data = await res.json();
       const container = document.getElementById('container');
-
       data.forEach((entry, index) => {
         if (entry.type === 'single') {
           const itemDiv = document.createElement('div');
           itemDiv.className = 'item';
-
-          const itemId = `single-${index}`;
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.id = itemId;
-          checkbox.checked = entry.checked;
-
-          if (checkbox.checked) itemDiv.classList.add('checked');
-
-          checkbox.addEventListener('change', () => {
-            itemDiv.classList.toggle('checked', checkbox.checked);
-          });
-
+          const id = `single-${index}`;
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.id = id;
+          cb.checked = entry.checked;
           const label = document.createElement('label');
-          label.setAttribute('for', itemId);
+          label.setAttribute('for', id);
           label.textContent = entry.label;
-
-          itemDiv.appendChild(checkbox);
-          itemDiv.appendChild(label);
+          itemDiv.append(cb, label);
           container.appendChild(itemDiv);
         } else {
           const groupEl = document.createElement('div');
           groupEl.className = 'group';
-          if (entry.checked) groupEl.classList.add('open');
-
-          const groupId = `group-${index}`;
+          const gid = `group-${index}`;
           const header = document.createElement('div');
           header.className = 'group-header';
-
-          const groupCheckbox = document.createElement('input');
-          groupCheckbox.type = 'checkbox';
-          groupCheckbox.id = groupId;
-          groupCheckbox.checked = entry.checked;
-
-          const groupLabel = document.createElement('label');
-          groupLabel.setAttribute('for', groupId);
-          groupLabel.innerHTML = entry.title;
-
-          header.appendChild(groupCheckbox);
-          header.appendChild(groupLabel);
-
+          const gcb = document.createElement('input');
+          gcb.type = 'checkbox';
+          gcb.id = gid;
+          gcb.checked = entry.checked;
+          const glabel = document.createElement('label');
+          glabel.setAttribute('for', gid);
+          glabel.textContent = entry.title;
+          header.append(gcb, glabel);
           const itemsContainer = document.createElement('div');
           itemsContainer.className = 'group-items';
-          itemsContainer.style.display = entry.checked ? 'block' : 'none';
-
-          entry.items.forEach((item, itemIndex) => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'item';
-
-            const itemId = `group-${index}-item-${itemIndex}`;
-            const itemCheckbox = document.createElement('input');
-            itemCheckbox.type = 'checkbox';
-            itemCheckbox.id = itemId;
-            itemCheckbox.checked = item.checked;
-            itemCheckbox.disabled = !entry.checked;
-
-            if (itemCheckbox.checked) itemDiv.classList.add('checked');
-
-            itemCheckbox.addEventListener('change', () => {
-              itemDiv.classList.toggle('checked', itemCheckbox.checked);
-            });
-
-            const itemLabel = document.createElement('label');
-            itemLabel.setAttribute('for', itemId);
-            itemLabel.textContent = item.label;
-
-            itemDiv.appendChild(itemCheckbox);
-            itemDiv.appendChild(itemLabel);
-            itemsContainer.appendChild(itemDiv);
+          entry.items.forEach((item, i) => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            const iid = `${gid}-item-${i}`;
+            const icb = document.createElement('input');
+            icb.type = 'checkbox';
+            icb.id = iid;
+            icb.checked = item.checked;
+            icb.disabled = !entry.checked;
+            const ilabel = document.createElement('label');
+            ilabel.setAttribute('for', iid);
+            ilabel.textContent = item.label;
+            div.append(icb, ilabel);
+            itemsContainer.appendChild(div);
           });
-
-          groupCheckbox.addEventListener('change', () => {
-            const isChecked = groupCheckbox.checked;
-            groupEl.classList.toggle('open', isChecked);
-            itemsContainer.style.display = isChecked ? 'block' : 'none';
-
-            const subCheckboxes = itemsContainer.querySelectorAll('input[type="checkbox"]');
-            subCheckboxes.forEach(cb => {
+          gcb.addEventListener('change', () => {
+            const open = gcb.checked;
+            groupEl.classList.toggle('open', open);
+            itemsContainer.style.display = open ? 'block' : 'none';
+            itemsContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+              cb.disabled = !open;
               cb.checked = false;
-              cb.disabled = !isChecked;
-              cb.dispatchEvent(new Event('change'));
             });
           });
-
-          groupEl.appendChild(header);
-          groupEl.appendChild(itemsContainer);
+          groupEl.append(header, itemsContainer);
           container.appendChild(groupEl);
         }
       });
     }
-
     function generatePDF() {
-      // Klone den gesamten body
-      const element = document.body.cloneNode(true);
-      // Entferne die Buttons
-      element.querySelector('.buttons').remove();
-
-      // Entferne alle einzelnen .item Elemente, die nicht ausgewählt sind
-      element.querySelectorAll('.item').forEach(itemDiv => {
-        const cb = itemDiv.querySelector('input[type="checkbox"]');
-        if (!cb.checked) {
-          itemDiv.remove();
-        }
+      const selected = [];
+      document.querySelectorAll('#container .item').forEach(div => {
+        const cb = div.querySelector('input[type="checkbox"]');
+        if (cb.checked) selected.push(div.querySelector('label').textContent);
       });
-
-      // Verarbeite Gruppen: entferne Gruppen ohne ausgewählte Items, öffne Gruppen mit ausgewählten Items
-      element.querySelectorAll('.group').forEach(groupEl => {
-        const itemsContainer = groupEl.querySelector('.group-items');
-        const remainingItems = itemsContainer.querySelectorAll('.item');
-        if (remainingItems.length === 0) {
-          groupEl.remove();
-        } else {
-          groupEl.classList.add('open');
-          itemsContainer.style.display = 'block';
-        }
+      const pdfEl = document.createElement('div');
+      const title = document.createElement('h1');
+      title.textContent = document.querySelector('h1').textContent;
+      pdfEl.appendChild(title);
+      const ul = document.createElement('ul');
+      selected.forEach(text => {
+        const li = document.createElement('li');
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        li.append(cb, document.createTextNode(' ' + text));
+        ul.appendChild(li);
       });
-
-      // Erzeuge PDF nur mit den verbleibenden ausgewählten Items
-      html2pdf().from(element).save('Packliste.pdf');
+      pdfEl.appendChild(ul);
+      html2pdf().from(pdfEl).save('Packliste.pdf');
     }
-
     loadPackliste();
   </script>
 </body>
