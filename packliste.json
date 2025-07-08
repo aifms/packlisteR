@@ -6,15 +6,6 @@
   },
   {
     "type": "group",
-    "title": "Lichtkoffer",
-    "checked": true,
-    "items": [
-      { "label": "the lamp", "checked": true },
-      { "label": "the akkubox", "checked": false }
-    ]
-  },
-  {
-    "type": "group",
     "title": "Kameraausrüstung",
     "checked": false,
     "items": [
@@ -22,14 +13,36 @@
       { "label": "Akkus", "checked": false }
     ]
   },
-    {
+  {
     "type": "single",
-    "label": "SPEICHERKARTE",
+    "label": "Speicherkarte",
     "checked": false
+  },
+  {
+    "type": "group",
+    "title": "Lichtkoffer",
+    "checked": true,
+    "items": [
+      { "label": "The Lamp", "checked": true },
+      { "label": "The Akkubox", "checked": false }
+    ]
   },
   {
     "type": "single",
     "label": "Gaffa Tape",
     "checked": false
+  },
+  {
+    "type": "group",
+    "title": "Mavic 4 Pro Drone",
+    "checked": true,
+    "items": [
+      { "label": "Mavic 4 Pro Drone", "checked": true },
+      { "label": "Remote Controller", "checked": true },
+      { "label": "Spare Propellers", "checked": false },
+      { "label": "Drone Batteries", "checked": true },
+      { "label": "Charger", "checked": true },
+      { "label": "MicroSD Card", "checked": false }
+    ]
   }
 ]
