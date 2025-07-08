@@ -22,6 +22,11 @@
       { "label": "Akkus", "checked": false }
     ]
   },
+    {
+    "type": "single",
+    "label": "SPEICHERKARTE",
+    "checked": false
+  },
   {
     "type": "single",
     "label": "Gaffa Tape",
