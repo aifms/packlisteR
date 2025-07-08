@@ -50,6 +50,7 @@
       margin-top: 2rem;
       display: flex;
       gap: 1rem;
+      justify-content: center;
     }
     button {
       padding: 0.75rem 1.25rem;
@@ -78,7 +79,7 @@
     <button onclick="generatePDF()">📄 Create PDF</button>
     <button onclick="window.print()">🖨️ Print</button>
   </div>
-  <footer>made by AS with ❤️ PacklistR v0.01a</footer>
+  <footer>made by AS with &lt;3 PacklistR v0.01a</footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
@@ -116,6 +117,10 @@
           header.append(gcb, glabel);
           const itemsContainer = document.createElement('div');
           itemsContainer.className = 'group-items';
+          if (entry.checked) {
+            groupEl.classList.add('open');
+            itemsContainer.style.display = 'block';
+          }
           entry.items.forEach((item, i) => {
             const div = document.createElement('div');
             div.className = 'item';
@@ -198,7 +203,7 @@
       pdfEl.appendChild(ul);
 
       const footer = document.createElement('footer');
-      footer.textContent = 'made by AS with ❤️ PacklistR v0.01a';
+      footer.textContent = 'made by AS with <3 PacklistR v0.01a';
       pdfEl.appendChild(footer);
 
       html2pdf().from(pdfEl).save('Packliste.pdf');
