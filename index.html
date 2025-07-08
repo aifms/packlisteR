@@ -66,7 +66,7 @@
   </style>
 </head>
 <body>
-  <h1>🎥 packlisteR</h1>
+  <h1 id="page-title">🎥 packlisteR</h1>
   <div id="container"></div>
   <div class="buttons">
     <button onclick="generatePDF()">📄 Create PDF</button>
@@ -136,6 +136,12 @@
           container.appendChild(groupEl);
         }
       });
+      const titleEl = document.getElementById('page-title');
+      titleEl.style.cursor = 'pointer';
+      titleEl.addEventListener('click', () => {
+        const neu = prompt('Gib neuen Titel ein:');
+        if (neu) titleEl.textContent = neu;
+      });
     }
     function generatePDF() {
       const selected = [];
@@ -144,8 +150,14 @@
         if (cb.checked) selected.push(div.querySelector('label').textContent);
       });
       const pdfEl = document.createElement('div');
+      pdfEl.style.backgroundColor = '#fff';
+      pdfEl.style.color = '#000';
+      pdfEl.style.padding = '1rem';
+      const styleTag = document.createElement('style');
+      styleTag.textContent = `body { background: white; color: black; } ul { list-style: none; padding: 0; } li { margin: 0.5rem 0; } input[type="checkbox"] { transform: scale(1.2); margin-right: 0.5rem; }`;
+      pdfEl.appendChild(styleTag);
       const title = document.createElement('h1');
-      title.textContent = document.querySelector('h1').textContent;
+      title.textContent = document.getElementById('page-title').textContent;
       pdfEl.appendChild(title);
       const ul = document.createElement('ul');
       selected.forEach(text => {
