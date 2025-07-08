@@ -1,0 +1,30 @@
+[
+  {
+    "type": "single",
+    "label": "Stativ",
+    "checked": true
+  },
+  {
+    "type": "group",
+    "title": "Lichtkoffer",
+    "checked": true,
+    "items": [
+      { "label": "the lamp", "checked": true },
+      { "label": "the akkubox", "checked": false }
+    ]
+  },
+  {
+    "type": "group",
+    "title": "Kameraausrüstung",
+    "checked": false,
+    "items": [
+      { "label": "Kamera", "checked": true },
+      { "label": "Akkus", "checked": false }
+    ]
+  },
+  {
+    "type": "single",
+    "label": "Gaffa Tape",
+    "checked": false
+  }
+]
