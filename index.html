@@ -63,6 +63,12 @@
     button:hover {
       background: #0056b3;
     }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #888;
+    }
   </style>
 </head>
 <body>
@@ -72,6 +78,8 @@
     <button onclick="generatePDF()">📄 Create PDF</button>
     <button onclick="window.print()">🖨️ Print</button>
   </div>
+  <footer>made by AS with ❤️ PacklistR v0.01a</footer>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     async function loadPackliste() {
@@ -143,33 +151,59 @@
         if (neu) titleEl.textContent = neu;
       });
     }
+
     function generatePDF() {
-      const selected = [];
-      document.querySelectorAll('#container .item').forEach(div => {
-        const cb = div.querySelector('input[type="checkbox"]');
-        if (cb.checked) selected.push(div.querySelector('label').textContent);
-      });
       const pdfEl = document.createElement('div');
       pdfEl.style.backgroundColor = '#fff';
       pdfEl.style.color = '#000';
       pdfEl.style.padding = '1rem';
       const styleTag = document.createElement('style');
-      styleTag.textContent = `body { background: white; color: black; } ul { list-style: none; padding: 0; } li { margin: 0.5rem 0; } input[type="checkbox"] { transform: scale(1.2); margin-right: 0.5rem; }`;
+      styleTag.textContent = `body { background: white; color: black; } ul { list-style: none; padding: 0; } li { margin: 0.5rem 0; } input[type="checkbox"] { transform: scale(1.2); margin-right: 0.5rem; } footer { text-align: center; margin-top: 2rem; font-size: 0.8rem; }`;
       pdfEl.appendChild(styleTag);
+
       const title = document.createElement('h1');
       title.textContent = document.getElementById('page-title').textContent;
       pdfEl.appendChild(title);
+
       const ul = document.createElement('ul');
-      selected.forEach(text => {
-        const li = document.createElement('li');
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        li.append(cb, document.createTextNode(' ' + text));
-        ul.appendChild(li);
+      const container = document.getElementById('container');
+      Array.from(container.children).forEach(child => {
+        if (child.classList.contains('item')) {
+          const cb = child.querySelector('input[type="checkbox"]');
+          if (cb.checked) {
+            const li = document.createElement('li');
+            const icb = document.createElement('input');
+            icb.type = 'checkbox';
+            li.append(icb, document.createTextNode(' ' + child.querySelector('label').textContent));
+            ul.appendChild(li);
+          }
+        } else if (child.classList.contains('group')) {
+          const selectedItems = Array.from(child.querySelectorAll('.group-items .item')).filter(div => div.querySelector('input[type="checkbox"]').checked);
+          if (selectedItems.length > 0) {
+            const groupLi = document.createElement('li');
+            groupLi.textContent = child.querySelector('.group-header label').textContent;
+            const subUl = document.createElement('ul');
+            selectedItems.forEach(div => {
+              const li = document.createElement('li');
+              const icb = document.createElement('input');
+              icb.type = 'checkbox';
+              li.append(icb, document.createTextNode(' ' + div.querySelector('label').textContent));
+              subUl.appendChild(li);
+            });
+            groupLi.appendChild(subUl);
+            ul.appendChild(groupLi);
+          }
+        }
       });
       pdfEl.appendChild(ul);
+
+      const footer = document.createElement('footer');
+      footer.textContent = 'made by AS with ❤️ PacklistR v0.01a';
+      pdfEl.appendChild(footer);
+
       html2pdf().from(pdfEl).save('Packliste.pdf');
     }
+
     loadPackliste();
   </script>
 </body>
